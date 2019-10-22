@@ -28,7 +28,7 @@
         </p>
 
         <p class="control">
-          <a class="button">
+          <a class="button"　@click="send">
             Send
           </a>
         </p>

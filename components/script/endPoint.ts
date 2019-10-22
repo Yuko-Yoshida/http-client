@@ -1,6 +1,33 @@
 const name: string = 'EndPoint'
 
 
+const getMethod: ($this: any) => Promise<object> = async function($this) {
+  const res = await $this.$axios.$get($this.endPoint)
+  return res
+}
+
+const postMethod: ($this: any) => Promise<object> = async function($this) {
+  const res = await $this.$axios.$post($this.endPoint)
+  return res
+}
+
+const putMethod: ($this: any) => Promise<object> = async function($this) {
+  const res = await $this.$axios.$put($this.endPoint)
+  return res
+}
+
+const deleteMethod: ($this: any) => Promise<object> = async function($this) {
+  const res = await $this.$axios.$delete($this.endPoint)
+  return res
+}
+
+const method: any[] = [
+  getMethod,
+  postMethod,
+  putMethod,
+  deleteMethod
+]
+
 interface Data {
   method: number
   methodName: string
@@ -44,9 +71,20 @@ const watch: Watch = {
   }
 }
 
+interface Methods {
+  send(): void
+}
+
+const methods: Methods = {
+  send: async function() {
+    const res = await method[(this as any).method]((this as any))
+    console.log(res)
+  }
+}
 
 export default {
   name,
   data,
+  methods,
   watch
 }
