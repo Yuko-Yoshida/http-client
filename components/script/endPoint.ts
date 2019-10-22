@@ -2,22 +2,22 @@ const name: string = 'EndPoint'
 
 
 const getMethod: ($this: any) => Promise<object> = async function($this) {
-  const res = await $this.$axios.$get($this.endPoint)
+  const res = await $this.$axios.get($this.endPoint)
   return res
 }
 
 const postMethod: ($this: any) => Promise<object> = async function($this) {
-  const res = await $this.$axios.$post($this.endPoint)
+  const res = await $this.$axios.post($this.endPoint)
   return res
 }
 
 const putMethod: ($this: any) => Promise<object> = async function($this) {
-  const res = await $this.$axios.$put($this.endPoint)
+  const res = await $this.$axios.put($this.endPoint)
   return res
 }
 
 const deleteMethod: ($this: any) => Promise<object> = async function($this) {
-  const res = await $this.$axios.$delete($this.endPoint)
+  const res = await $this.$axios.delete($this.endPoint)
   return res
 }
 
@@ -27,6 +27,18 @@ const method: any[] = [
   putMethod,
   deleteMethod
 ]
+
+interface Res {
+  headers: object
+  data: string | object
+}
+
+const methodHandler: ($this: any) => Promise<Res> = function($this) {
+  $this.$store.state.endPoint.head.map(
+    (head: { key: string, value: string }) => $this.$axios.setHeader(head.key, head.value)
+  )
+  return method[$this.method]($this)
+}
 
 interface Data {
   method: number
@@ -48,8 +60,8 @@ interface Watch {
 }
 
 const watch: Watch = {
-  method: function(method) {
-    (this as any).$store.commit('endPoint/updateMethod', method)
+  method: function(this: any, method) {
+    this.$store.commit('endPoint/updateMethod', method)
 
     switch (Number(method)) {
       case 0:
@@ -66,8 +78,8 @@ const watch: Watch = {
         break
       }
   },
-  endPoint: function(endPoint) {
-    (this as any).$store.commit('endPoint/updateEndPoint', endPoint)
+  endPoint: function(this: any, endPoint) {
+    this.$store.commit('endPoint/updateEndPoint', endPoint)
   }
 }
 
@@ -76,9 +88,10 @@ interface Methods {
 }
 
 const methods: Methods = {
-  send: async function() {
-    const res = await method[(this as any).method]((this as any))
-    console.log(res)
+  send: async function(this: any) {
+    const { headers, data }: Res = await methodHandler(this)
+    this.$store.commit('endPoint/setResHeader', headers)
+    this.$store.commit('endPoint/setResBody', data)
   }
 }
 
