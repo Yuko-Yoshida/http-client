@@ -4,17 +4,20 @@ const name: string = 'EndPoint'
 interface Data {
   method: number
   methodName: string
+  endPoint: string
 }
 
 const data: () => Data = function() {
   return {
     method: 0,
-    methodName: 'GET'
+    methodName: 'GET',
+    endPoint: ''
   }
 }
 
 interface Watch {
   method(method: number): void
+  endPoint(endPoint: string): void
 }
 
 const watch: Watch = {
@@ -35,6 +38,9 @@ const watch: Watch = {
         (this as any).methodName = 'DELETE'
         break
       }
+  },
+  endPoint: function(endPoint) {
+    (this as any).$store.commit('endPoint/updateEndPoint', endPoint)
   }
 }
 

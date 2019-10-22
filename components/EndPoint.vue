@@ -24,8 +24,9 @@
         </b-dropdown>
 
         <p class="control is-expanded">
-          <input class="input" type="text" placeholder="End point">
+          <input class="input" type="url" placeholder="End point" v-model="endPoint">
         </p>
+
         <p class="control">
           <a class="button">
             Send
