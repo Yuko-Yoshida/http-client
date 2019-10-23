@@ -11,6 +11,7 @@ interface State {
   head: object[]
   resHeaders: object
   resBody: object
+  isAppended: boolean[]
 }
 
 interface Head {
@@ -23,18 +24,20 @@ interface Mutations {
   updateEndPoint(state: State, endPoint: string): void
   pushHead(state: State, head: Head): void
   delHead(state: State, key: number): void
-  updateHead(state: State, key: number, head: Head): void
+  updateHead(state: State, value: any): void
   setResHeader(state: State, headers: object): void
   setResBody(state: State, body: object): void
+  switchAppendedFlag(state: State, value: { index: number, flag: boolean }): void
 }
 
 export const state: () => State = function () {
   return {
     method: Method.GET,
     endPoint: '',
-    head: [],
+    head: [{ key: '', value:'' }],
     resHeaders: {},
-    resBody: {}
+    resBody: {},
+    isAppended: [false]
   }
 }
 
@@ -47,17 +50,23 @@ export const mutations: Mutations = {
   },
   pushHead: function(state, head) {
     state.head.push(head)
+    state.isAppended.push(false)
   },
   delHead: function(state, key) {
     state.head.splice(key, 1)
+    state.isAppended.splice(key, 1)
   },
-  updateHead: function(state, key, head) {
-    state.head[key] = head
+  updateHead: function(state, { index, key, value }) {
+    console.log({ key, value })
+    state.head[index] = { key, value }
   },
   setResHeader: function(state, headers) {
     state.resHeaders = headers
   },
   setResBody: function(state, body) {
     state.resBody = body
+  },
+  switchAppendedFlag: function(state, value) {
+    state.isAppended[value.index] = value.flag
   }
 }
