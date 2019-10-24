@@ -4,6 +4,7 @@
         <div class="column">
           <EndPoint />
           <Header />
+          <ResponseBody />
         </div>
       </div>
   </section>
@@ -13,13 +14,15 @@
 
 import EndPoint from '~/components/EndPoint.vue'
 import Header from '~/components/Header.vue'
+import ResponseBody from '~/components/ResponseBody.vue'
 
 export default {
   name: 'HomePage',
 
   components: {
     EndPoint,
-    Header
+    Header,
+    ResponseBody
   }
 
 }
